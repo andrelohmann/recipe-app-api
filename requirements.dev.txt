@@ -1,0 +1,2 @@
+# Development
+flake8==6.1.0
