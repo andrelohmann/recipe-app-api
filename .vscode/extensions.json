@@ -6,6 +6,7 @@
         "ms-vscode-remote.remote-containers",
         "esbenp.prettier-vscode",
         "donjayamanne.python-extension-pack",
-        "tabnine.tabnine-vscode"
+        "tabnine.tabnine-vscode",
+        "github.vscode-github-actions"
     ]
 }
