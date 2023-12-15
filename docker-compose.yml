@@ -8,14 +8,18 @@ services:
       dockerfile: ./Dockerfile
     ports:
     - 8000:8000
-    depends_on:
-    - postgresdb
+    command: >
+      sh -c "python manage.py wait_for_db && 
+             python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
     environment:
     - DB_HOST=postgresdb
     - DB_NAME=apidemo
     - DB_USER=apidemo
     - DB_PASS=apidemo
     - DB_PORT=5432
+    depends_on:
+    - postgresdb
 
   postgresdb:
     image: postgres:alpine

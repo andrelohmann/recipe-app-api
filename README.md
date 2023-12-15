@@ -42,3 +42,8 @@ Therefor a special app will be crated called "core" including these kind of core
 python manage.py startapp core
 ```
 
+Test db availability
+
+```
+python manage.py wait_for_db
+```
