@@ -7,21 +7,24 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 8000:8000
-#     depends_on:
-#       - postgresdb
-#       - redis
-#       - mailpit
-#   postgresdb:
-#     image: postgres
-#     volumes:
-#       - pgdata:/var/lib/postgresql/data
-#     ports:
-#       - 5432:5432
-#     environment:
-#       - POSTGRES_DB=apidemo
-#       - POSTGRES_USER=apidemo
-#       - POSTGRES_PASSWORD=apidemo
+    - 8000:8000
+    depends_on:
+    - postgresdb
+    environment:
+    - DB_HOST=postgresdb
+    - DB_NAME=apidemo
+    - DB_USER=apidemo
+    - DB_PASS=apidemo
+    - DB_PORT=5432
+
+  postgresdb:
+    image: postgres:alpine
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_DB=apidemo
+    - POSTGRES_USER=apidemo
+    - POSTGRES_PASSWORD=apidemo
 #   redis:
 #     image: redis:7-alpine
 #     volumes:

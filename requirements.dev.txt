@@ -1,2 +1,3 @@
 # Development
 flake8==6.1.0
+psycopg2-binary==2.9.9

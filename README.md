@@ -25,3 +25,20 @@ Run flake8 linting
 ```
 flake8
 ```
+
+Run tests
+
+```
+python manage.py test
+```
+
+## DB Race Condition
+
+To avoid race conditions, of a not ready startet db, we can create a wait_for_db routine.
+
+Therefor a special app will be crated called "core" including these kind of core functionalities.
+
+```
+python manage.py startapp core
+```
+
