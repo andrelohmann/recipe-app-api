@@ -16,9 +16,11 @@ class UserManager(BaseUserManager):
         """Create, save and return a new user."""
         if not email:
             raise ValueError('User must have an email address.')
-        if 'name' not in extra_fields or not extra_fields.get("name"):
-            raise ValueError('User must have a name.')
-        user = self.model(email=self.normalize_email(email), **extra_fields)
+        if 'first_name' not in extra_fields or not extra_fields.get("first_name"):
+            raise ValueError('User must have a first name.')
+        if 'last_name' not in extra_fields or not extra_fields.get("last_name"):
+            raise ValueError('User must have a last name.')
+        user = self.model(email=self.normalize_email(email).lower(), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -26,20 +28,11 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         """Create and return a new superuser."""
-        # Set default name to Superuser, if no name is set
-        if 'name' not in extra_fields:
-            user = self.create_user(
-                email,
-                password,
-                name='Superuser',
-                **extra_fields,
-            )
-        else:
-            user = self.create_user(
-                email,
-                password,
-                **extra_fields,
-            )
+        user = self.create_user(
+            email,
+            password,
+            **extra_fields,
+        )
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -50,7 +43,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system."""
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -59,3 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    def __str__(self):
+        return self.email

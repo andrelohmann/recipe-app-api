@@ -10,23 +10,30 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-import os
+from os import getenv, environ, path
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
+import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Dotenv
+dotenv_file = BASE_DIR / '.env.local'
+if path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5gyn98!dh1_)^hjt2%s_72@1w8e-81@%jm-#16f*aeu9iid^b+'
+SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
+# SECRET_KEY = 'django-insecure-5gyn98!dh1_)^hjt2%s_72@1w8e-81@%jm-#16f*aeu9iid^b+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -35,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    # uncommented, when sessions will be stored in redis
+    #'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
@@ -43,6 +51,8 @@ INSTALLED_APPS = [
     # 'rest_framework.authtoken',
     'drf_spectacular',
     # 'user_auth_token',
+    'djoser',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -88,15 +98,28 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+        'NAME': environ.get('DB_NAME'),
+        'USER': environ.get('DB_USER'),
+        'PASSWORD': environ.get('DB_PASS'),
+        'HOST': environ.get('DB_HOST'),
+        'PORT': environ.get('DB_PORT'),
         'CONN_MAX_AGE': 60,
     }
 }
 
+# REDIS CACHE
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": environ.get('REDIS_LOCATION'),
+    }
+}
+SESSION_CACHE_ALIAS = "default"
+# If data should be stored both in cache and db
+#SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+# of course django.contrib.sessions needs to be added then
+# Use Cache only
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -133,6 +156,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -143,9 +169,30 @@ AUTH_USER_MODEL = 'core.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/{uid}/{token}',
+    #'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activation/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'TOKEN_MODEL': None,
+    #'SERIALIZERS': {},
 }
 
 SPECTACULAR_SETTINGS = {
@@ -155,3 +202,17 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': True,
     # OTHER SETTINGS
 }
+
+# MAILPIT Mailserver
+if environ.get('EMAIL_HOST') is not None:
+    EMAIL_HOST = environ.get('EMAIL_HOST')
+if environ.get('EMAIL_PORT') is not None:
+    EMAIL_PORT = environ.get('EMAIL_PORT')
+if environ.get('EMAIL_HOST_USER') is not None:
+    EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER')
+if environ.get('EMAIL_HOST_PASSWORD') is not None:
+    EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD')
+if environ.get('EMAIL_USE_TLS') is not None:
+    EMAIL_USE_TLS = environ.get('EMAIL_USE_TLS')
+if environ.get('EMAIL_USE_SSL') is not None:
+    EMAIL_USE_SSL = environ.get('EMAIL_USE_SSL')
