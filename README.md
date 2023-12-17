@@ -54,6 +54,14 @@ python manage.py wait_for_db
 * https://django-rest-framework-simplejwt.readthedocs.io/
 * https://jazzband.github.io/django-rest-knox/auth/
 * https://django-oauth-toolkit.readthedocs.io/en/latest/
+* https://saasitive.com/tutorial/django-rest-framework-register-user-email-verification/
+* https://dj-rest-auth.readthedocs.io/
+* https://www.youtube.com/watch?v=mDosRuqDG5o
+* https://dev.to/jkaylight/django-rest-framework-authentication-with-dj-rest-auth-4kli
+* https://drf-social-oauth2.readthedocs.io/en/latest/
+* https://testdriven.io/blog/django-rest-auth/#:~:text=django%2Dallauth%20addresses%20authentication%2C%20registration,registration%20and%20other%20authentication%20tasks.
+* https://www.youtube.com/watch?v=2pZmxh8Tf78
+* https://docs.digitalocean.com/developer-center/deploy-a-django-app-on-app-platform/
 
 ### Idea:
 

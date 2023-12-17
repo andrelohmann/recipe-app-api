@@ -7,6 +7,9 @@
         "esbenp.prettier-vscode",
         "donjayamanne.python-extension-pack",
         "tabnine.tabnine-vscode",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "batisteo.vscode-django",
+        "mikestead.dotenv",
+        "ms-python.autopep8"
     ]
 }

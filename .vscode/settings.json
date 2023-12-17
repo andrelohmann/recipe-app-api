@@ -1,3 +1,7 @@
 {
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultFormatter": "ms-python.autopep8"
+    }
 }
