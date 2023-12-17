@@ -47,3 +47,15 @@ Test db availability
 ```
 python manage.py wait_for_db
 ```
+
+## REST Auth
+
+* https://django-rest-registration.readthedocs.io/
+* https://django-rest-framework-simplejwt.readthedocs.io/
+* https://jazzband.github.io/django-rest-knox/auth/
+* https://django-oauth-toolkit.readthedocs.io/en/latest/
+
+### Idea:
+
+* Implement registration and simple jwt
+* Create OAuth Provider as standalone service
