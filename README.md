@@ -60,10 +60,17 @@ python manage.py wait_for_db
 * https://dev.to/jkaylight/django-rest-framework-authentication-with-dj-rest-auth-4kli
 * https://drf-social-oauth2.readthedocs.io/en/latest/
 * https://testdriven.io/blog/django-rest-auth/#:~:text=django%2Dallauth%20addresses%20authentication%2C%20registration,registration%20and%20other%20authentication%20tasks.
-* https://www.youtube.com/watch?v=2pZmxh8Tf78
+* https://www.youtube.com/watch?v=2pZmxh8Tf78 # social login OAuth from 1:58, Prod Deployment from 2:30
+* https://www.youtube.com/watch?v=EsDMs3zB6L4
 * https://docs.digitalocean.com/developer-center/deploy-a-django-app-on-app-platform/
 
 ### Idea:
 
 * Implement registration and simple jwt
 * Create OAuth Provider as standalone service
+
+## Auth TODOs
+
+* Write Tests
+* Add Email Verfification URL
+* Add Password reset possibility

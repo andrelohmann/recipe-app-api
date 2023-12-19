@@ -16,11 +16,20 @@ class UserManager(BaseUserManager):
         """Create, save and return a new user."""
         if not email:
             raise ValueError('User must have an email address.')
-        if 'first_name' not in extra_fields or not extra_fields.get("first_name"):
+
+        if 'first_name' not in extra_fields \
+                or not extra_fields.get("first_name"):
             raise ValueError('User must have a first name.')
-        if 'last_name' not in extra_fields or not extra_fields.get("last_name"):
+
+        if 'last_name' not in extra_fields \
+                or not extra_fields.get("last_name"):
             raise ValueError('User must have a last name.')
-        user = self.model(email=self.normalize_email(email).lower(), **extra_fields)
+
+        user = self.model(
+            email=self.normalize_email(email).lower(),
+            **extra_fields
+        )
+
         user.set_password(password)
         user.save(using=self._db)
 

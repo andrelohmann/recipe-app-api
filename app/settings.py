@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     #'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'core',
     'rest_framework',
     # 'rest_framework.authtoken',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -170,7 +172,9 @@ AUTH_USER_MODEL = 'core.User'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # We have overriden the JWTAuthentication class, to allow token in Cookie
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'authentication.authentication.CustomJWTAuthentication',
     ],
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -180,7 +184,10 @@ REST_FRAMEWORK = {
     ],
 }
 
+# from datetime import timedelta
 SIMPLE_JWT = {
+   # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+   # "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
@@ -194,6 +201,19 @@ DJOSER = {
     'TOKEN_MODEL': None,
     #'SERIALIZERS': {},
 }
+
+SITE_NAME = "DjangoBongo"
+
+AUTH_COOKIE = 'access'  # name is fixed
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5  # 5 Minutes, like default settings for token, look at SIMPLE_JWT
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24  # 24 hours, like default settings for token, look at SIMPLE_JWT
+AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True'  # https on prod, but http = False on dev
+AUTH_COOKIE_HTTP_ONLY = True
+AUTH_COOKIE_PATH = '/'
+AUTH_COOKIE_SAMESITE =  'None'  # Strict, Lax, None - strict origin must be on same domain - None irgnores origin
+
+CORS_ALLOWED_ORIGINS = getenv('CORS_ALLOWED_ORIGINS', 'http://127.0.0.1:8000,http://localhost:8000').split(',')
+CORS_ALLOW_CREDENTIALS = True
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'BoatSpot API',
