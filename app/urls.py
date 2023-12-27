@@ -45,4 +45,5 @@ api_v0_urlpatterns = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v0/', include(api_v0_urlpatterns)),
+    path('', include('web.urls')),
 ]

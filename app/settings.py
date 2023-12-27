@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     # 'user_auth_token',
     'djoser',
     'authentication',
+    'django_bootstrap5',
+    'web',
 ]
 
 MIDDLEWARE = [
@@ -145,9 +147,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = getenv('LANGUAGE_CODE', 'en-us')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = getenv('TIME_ZONE', 'UTC')
 
 USE_I18N = True
 

@@ -6,3 +6,4 @@ django-cors-headers==4.3.1
 python-dotenv==1.0.0
 redis==5.0.1
 hiredis==2.2.3
+django-bootstrap5==23.3
